@@ -1,3 +1,4 @@
+import re
 import string
 import nltk
 from nltk.corpus import stopwords
@@ -67,3 +68,45 @@ teks_tanpa_stopwords = " ".join(kata_penting)
 
 print("\n", "Teks asli: ", teks)
 print("Teks setelah filtering stopwords NTLK: ", teks_tanpa_stopwords, "\n")
+
+# Word Tokenization
+teks = "Ini adalah contoh kalimat untuk tokenisasi kata."
+phrases = teks.split(" ")
+print(phrases)
+
+teks = "Ini adalah contoh kalimat pertama. Dan ini adalah contoh kalimat kedua."
+sentences = re.split(r"(?<=[.!?]) +", teks)
+print(sentences)
+
+teks = "Apel, jeruk, pisang, dan mangga."
+phrases = teks.split(",")
+print(phrases)
+
+teks = "Pertama, kita perlu menyiapkan bahan-bahan yang diperlukan."
+tokens = re.findall(r"\w+|\d+", teks)
+print(tokens)
+
+teks = "Ini adalah contoh tokenisasi berbasis model."
+tokens = teks.split()
+print(tokens, "\n")
+
+# Stemming
+from nltk.stem import PorterStemmer
+
+stemmer = PorterStemmer()
+words = ["running", "easily", "bought", "crying", "leaves"]
+stemmed = [stemmer.stem(word) for word in words]
+print(f"Teks asli: {words}")
+print(f"Stemmed: {stemmed}", "\n")
+
+# Lemmatization
+nltk.download("wordnet")
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import wordnet
+
+lemmatizer = WordNetLemmatizer()
+words = ["running", "easily", "bought", "crying", "leaves"]
+
+lemmatized = [lemmatizer.lemmatize(word, pos=wordnet.VERB) for word in words]
+print(f"Teks asli: {words}")
+print(f"Lemmatized: {lemmatized}", "\n")
