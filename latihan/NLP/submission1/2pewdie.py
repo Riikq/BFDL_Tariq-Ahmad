@@ -4,6 +4,8 @@ import string
 import csv
 import requests
 from io import StringIO
+import matplotlib.pyplot as plt
+from wordcloud import WordCloud
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
@@ -52,11 +54,11 @@ def filteringText(text):
     stop_words = set(stopwords.words("english"))
     negation_words = {"not", "no", "never", "neither", "nor", "but", "none"}
     final_stop_words = stop_words - negation_words
-    youtube_noise = {"br"}
+    youtube_noise = {"br", "href"}
     final_stop_words.update(youtube_noise)
     filtered = []
     for txt in text:
-        if txt not in stop_words:
+        if txt not in final_stop_words:
             filtered.append(txt)
     text = filtered
     return text
@@ -87,10 +89,34 @@ def get_vader_label(text):
     return score["compound"], polarity
 
 
-result = clean_df["text_clean"].apply(get_vader_label)
+result = clean_df["text_akhir"].apply(get_vader_label)
 result = list(zip(*result))
 
 clean_df["polarity_score"] = result[0]
 clean_df["polarity"] = result[1]
 
 print(clean_df["polarity"].value_counts())
+
+
+def show_wordcloud(data, title):
+    text = " ".join(review for review in data)
+    wordcloud = WordCloud(
+        width=800,
+        height=400,
+        background_color="white",
+        max_words=100,
+        colormap="viridis",
+    ).generate(text)
+
+    plt.figure(figsize=(10, 5))
+    plt.imshow(wordcloud, interpolation="bilinear")
+    plt.title(title, fontsize=20)
+    plt.axis("off")
+    plt.show()
+
+
+show_wordcloud(clean_df["text_akhir"], "All Comments WordCloud")
+pos_data = clean_df[clean_df["polarity"] == "positive"]["text_akhir"]
+show_wordcloud(pos_data, "Positive Sentiment WordCloud")
+neg_data = clean_df[clean_df["polarity"] == "negative"]["text_akhir"]
+show_wordcloud(neg_data, "Negative Sentiment WordCloud")
