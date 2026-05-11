@@ -3,7 +3,7 @@ from googleapiclient.discovery import build
 
 import pandas as pd
 
-API_KEY = "AIzaSyDH4oPefFA8HrZR_1uvfWeMxw2CXGp1bmc"
+API_KEY = "AIzaxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 VIDEO_ID = "VGt-BZ-SxGI"
 
 
